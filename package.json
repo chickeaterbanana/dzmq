@@ -6,10 +6,17 @@
 	"authors": [
 		"Kyle Phelps"
 	],
+
 	"dependencies": {
         "zeromq": "~master"
 	},
     "sourcePaths": [
         "dzmq"
+    ],
+    "configurations": [
+        {
+            "name": "test",
+            "targetType": "executable"
+        }
     ]
 }
