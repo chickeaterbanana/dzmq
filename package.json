@@ -1,0 +1,15 @@
+{
+	"name": "dzmq",
+	"description": "A D wrapper around the ZeroMQ C bindings",
+	"homepage": "http://github.com/kyphelps/dzmq",
+	"copyright": "Copyright © 2013, Kyle Phelps",
+	"authors": [
+		"Kyle Phelps"
+	],
+	"dependencies": {
+        "zeromq": "~master"
+	},
+    "sourcePaths": [
+        "dzmq"
+    ]
+}
