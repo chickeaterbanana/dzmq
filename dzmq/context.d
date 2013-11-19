@@ -1,18 +1,22 @@
 module dzmq.context;
 
 import deimos.zmq.zmq;
+import dunit.toolkit;
+import dzmq.error;
+import dzmq.option;
+import std.exception;
 
 class ZMQContext
 {
 public:
     this()
     {
-        mContext = zmq_ctx_new();
+        mContext = ZMQEnforce!(void*)(zmq_ctx_new(), null);
     }
 
     ~this()
     {
-        zmq_ctx_destroy(mContext);
+        ZMQEnforce(zmq_ctx_destroy(mContext));
     }
 
     mixin OptionGetSet!(mContext, zmq_ctx_get, zmq_ctx_set);
@@ -26,7 +30,14 @@ private:
 unittest
 {
     auto c = new ZMQContext;
-    assert(c.GetOption(ZMQ_IO_THREADS) == ZMQ_IO_THREADS_DFLT);
+    c.GetOption(ZMQ_IO_THREADS).assertEqual(ZMQ_IO_THREADS_DFLT);
     c.SetOption(ZMQ_IO_THREADS, 2);
-    assert(c.GetOption(ZMQ_IO_THREADS) == 2);
+    c.GetOption(ZMQ_IO_THREADS).assertEqual(2);
+}
+
+unittest
+{
+    auto c = new ZMQContext;
+    assertThrown!ZMQException(c.GetOption(123));
+    assertThrown!ZMQException(c.SetOption(99, 0));
 }
