@@ -21,7 +21,7 @@ public:
 
     mixin OptionGetSet!(mContext, zmq_ctx_get, zmq_ctx_set);
 
-private:
+package:
     void* mContext;
 
 }
