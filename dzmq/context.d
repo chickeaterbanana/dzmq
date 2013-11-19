@@ -2,19 +2,6 @@ module dzmq.context;
 
 import deimos.zmq.zmq;
 
-mixin template OptionGetSet(alias Member, alias Get, alias Set)
-{
-    void SetOption(int option, int val)
-    {
-        Set(Member, option, val);
-    }
-
-    int GetOption(int option)
-    {
-        return Get(Member, option);
-    }
-}
-
 class ZMQContext
 {
 public:
