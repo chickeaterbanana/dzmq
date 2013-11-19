@@ -57,6 +57,11 @@ public:
         return ZMQEnforce(zmq_msg_data(&mMessage));
     }
 
+    T* getData(T)()
+    {
+        return cast(T*)this.data;
+    }
+
     @property size_t size()
     {
         return ZMQEnforce(zmq_msg_size(&mMessage));
@@ -105,5 +110,5 @@ unittest
     auto msg = new ZMQMessage(temp);
     msg.size.assertEqual(temp.sizeof);
     msg.more().assertFalse();
-    (*cast(Temp*)msg.data).assertEqual(temp);
+    (*msg.getData!Temp).assertEqual(temp);
 }
