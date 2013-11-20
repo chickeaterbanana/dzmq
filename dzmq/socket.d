@@ -171,3 +171,14 @@ unittest
     alias char[4] four_str;
     (*n.getData!four_str()).assertEqual(*m.getData!four_str());
 }
+
+void zmqProxy(ZMQSocket frontend, ZMQSocket backend)
+{
+    ZMQEnforce(zmq_proxy(frontend.mSocket, backend.mSocket, null));
+}
+
+
+void zmqProxy(ZMQSocket frontend, ZMQSocket backend, ZMQSocket capture)
+{
+    ZMQEnforce(zmq_proxy(frontend.mSocket, backend.mSocket, capture.mSocket));
+}
