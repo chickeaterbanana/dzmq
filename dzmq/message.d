@@ -4,6 +4,7 @@ import deimos.zmq.zmq;
 import dunit.toolkit;
 import dzmq.error;
 import dzmq.option;
+import dzmq.socket;
 
 // int zmq_msg_send(zmq_msg_t* msg, void* s, int flags);
 // int zmq_msg_recv(zmq_msg_t* msg, void* s, int flags);
@@ -42,14 +43,14 @@ public:
         ZMQEnforce(zmq_msg_close(&mMessage));
     }
 
-    void send()
+    void send(ZMQSocket s, int flags = 0)
     {
-        assert(false);
+        ZMQEnforce(zmq_msg_send(&mMessage, s.mSocket, flags));
     }
 
-    void recv()
+    void recv(ZMQSocket s, int flags = 0)
     {
-        assert(false);
+        ZMQEnforce(zmq_msg_recv(&mMessage, s.mSocket, flags));
     }
 
     @property void* data()
