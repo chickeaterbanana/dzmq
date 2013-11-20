@@ -73,12 +73,12 @@ public:
         return zmq_msg_more(&mMessage) == 1;
     }
 
-    void SetOption(int option, int val)
+    void setOption(int option, int val)
     {
         ZMQEnforce(zmq_msg_set(&mMessage, option, val));
     }
 
-    int GetOption(int option)
+    int getOption(int option)
     {
         return ZMQEnforce(zmq_msg_get(&mMessage, option));
     }

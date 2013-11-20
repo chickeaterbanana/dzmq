@@ -30,14 +30,14 @@ package:
 unittest
 {
     auto c = new ZMQContext;
-    c.GetOption(ZMQ_IO_THREADS).assertEqual(ZMQ_IO_THREADS_DFLT);
-    c.SetOption(ZMQ_IO_THREADS, 2);
-    c.GetOption(ZMQ_IO_THREADS).assertEqual(2);
+    c.getOption(ZMQ_IO_THREADS).assertEqual(ZMQ_IO_THREADS_DFLT);
+    c.setOption(ZMQ_IO_THREADS, 2);
+    c.getOption(ZMQ_IO_THREADS).assertEqual(2);
 }
 
 unittest
 {
     auto c = new ZMQContext;
-    assertThrown!ZMQException(c.GetOption(123));
-    assertThrown!ZMQException(c.SetOption(99, 0));
+    assertThrown!ZMQException(c.getOption(123));
+    assertThrown!ZMQException(c.setOption(99, 0));
 }
