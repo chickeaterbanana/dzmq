@@ -2,6 +2,7 @@ module dzmq.error;
 
 import std.exception;
 
+// TODO: change to use zmq_strerror
 alias ErrnoException ZMQException;
 
 T ZMQEnforce(T)(T val, T fail_val)
