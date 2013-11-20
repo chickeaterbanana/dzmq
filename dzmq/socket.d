@@ -78,18 +78,18 @@ class ZMQSocket
             auto ctx = new ZMQContext;
             auto s = new ZMQSocket(ctx, ZMQ_REQ);
             " ~ fullyQualifiedName!(T) ~ " val = " ~ to!string(test_val) ~ ";
-            s.set" ~ name ~ "(val);
-            s.get" ~ name ~ "().assertEqual(val);
+            s." ~ name ~ "(val);
+            s." ~ name ~ "().assertEqual(val);
         }";
 
     enum DefineOptionGet(T, string name, int id) =
-        fullyQualifiedName!(T) ~ " get" ~ name ~ "()" ~ "
+        "@property " ~ fullyQualifiedName!(T) ~ " " ~ name ~ "()" ~ "
         {
             return getSockOpt!(" ~ fullyQualifiedName!(T) ~ ")(" ~ to!string(id) ~ ");
         }";
 
     enum DefineOptionSet(T, string name, int id) =
-        "void set" ~ name ~ "(" ~ fullyQualifiedName!(T) ~ " val)
+        "@property void " ~ name ~ "(" ~ fullyQualifiedName!(T) ~ " val)
         {
             setSockOpt(" ~ to!string(id) ~ ", val);
         }";
