@@ -3,6 +3,7 @@
     "description": "A D wrapper around the ZeroMQ C bindings",
     "homepage": "http://github.com/kyphelps/dzmq",
     "copyright": "Copyright © 2013, Kyle Phelps",
+    "license": "MIT",
     "authors": [
         "Kyle Phelps"
     ],
