@@ -7,7 +7,7 @@
     "authors": [
         "Kyle Phelps"
     ],
-
+    "importPaths": ["."],
     "dependencies": {
         "zeromq": "~master",
         "dunit": "~master"
