@@ -15,6 +15,7 @@
     "sourcePaths": [
         "dzmq"
     ],
+    "targetType": "sourceLibrary",
     "configurations": [
         {
             "name": "test",
