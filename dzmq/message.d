@@ -5,6 +5,7 @@ import dunit.toolkit;
 import dzmq.error;
 import dzmq.option;
 import dzmq.socket;
+import dzmq.tools;
 
 // int zmq_msg_send(zmq_msg_t* msg, void* s, int flags);
 // int zmq_msg_recv(zmq_msg_t* msg, void* s, int flags);
@@ -34,8 +35,7 @@ public:
     this(T)(T data)
     {
         this(data.sizeof);
-        immutable(void*) source = cast(immutable void*)&data;
-        (this.data())[0 .. data.sizeof] = source[0 .. data.sizeof];
+        (this.data())[0 .. data.sizeof] = toVoidPointer(data)[0 .. data.sizeof];
     }
 
     ~this()

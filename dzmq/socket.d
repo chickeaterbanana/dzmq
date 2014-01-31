@@ -5,6 +5,7 @@ import dunit.toolkit;
 import dzmq.context;
 import dzmq.error;
 import dzmq.message;
+import dzmq.tools;
 import std.conv;
 import std.stdio;
 import std.string;
@@ -51,7 +52,7 @@ class ZMQSocket
 
     void send(T)(const T data, int flags = 0)
     {
-        ZMQEnforce(zmq_send(mSocket, cast(void*)&data, data.sizeof, flags));
+        ZMQEnforce(zmq_send(mSocket, toVoidPointer(data), data.sizeof, flags));
     }
 
     void send(ZMQMessage msg, int flags = 0)
@@ -59,9 +60,9 @@ class ZMQSocket
         ZMQEnforce(zmq_sendmsg(mSocket, &msg.mMessage, flags));
     }
 
-    void recv(T)(out T output, int flags = 0)
+    void recv(T)(out T output, int flags = 0) 
     {
-        ZMQEnforce(zmq_recv(mSocket, cast(void*)&output, output.sizeof, flags));
+        ZMQEnforce(zmq_recv(mSocket, toVoidPointer(output), output.sizeof, flags));
     }
 
     void recv(ZMQMessage msg, int flags = 0)
@@ -170,6 +171,7 @@ unittest
     req.recv(n);
     alias char[4] four_str;
     (*n.getData!four_str()).assertEqual(*m.getData!four_str());
+    (*n.getData!four_str()).assertEqual("abcd");
 }
 
 void zmqProxy(ZMQSocket frontend, ZMQSocket backend)
