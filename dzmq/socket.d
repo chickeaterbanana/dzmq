@@ -5,7 +5,6 @@ import dunit.toolkit;
 import dzmq.context;
 import dzmq.error;
 import dzmq.message;
-import dzmq.tools;
 import std.conv;
 import std.stdio;
 import std.string;
@@ -50,9 +49,21 @@ class ZMQSocket
         ZMQEnforce(zmq_disconnect(mSocket, toStringz(addr)));
     }
 
-    void send(T)(const T data, int flags = 0)
+    void send(T)(const T data, size_t size, int flags = 0) if (isPointer!T)
     {
-        ZMQEnforce(zmq_send(mSocket, toVoidPointer(data), data.sizeof, flags));
+        ZMQEnforce(zmq_send(mSocket, cast(void*)data, size, flags));
+    }
+
+    void send(T)(const T data, int flags) if (isArray!T)
+    {
+        this.send(data.ptr, data.length, flags);
+    }
+
+    void send(T)(const T data, int flags = 0) if (isScalarType!T || is(T == struct))
+    {
+        ubyte[] value = new ubyte[data.sizeof];
+        value[0..data.sizeof] = (cast(ubyte*)&data)[0..data.sizeof];
+        this.send(value, flags);
     }
 
     void send(ZMQMessage msg, int flags = 0)
@@ -60,9 +71,21 @@ class ZMQSocket
         ZMQEnforce(zmq_sendmsg(mSocket, &msg.mMessage, flags));
     }
 
-    void recv(T)(out T output, int flags = 0) 
+    void recv(T)(T output, size_t size, int flags = 0) if (isPointer!T)
     {
-        ZMQEnforce(zmq_recv(mSocket, toVoidPointer(output), output.sizeof, flags));
+        void *data = cast(void*)(new ubyte[size]);
+        ZMQEnforce(zmq_recv(mSocket, data, size, flags));
+        output[0..size] = (cast(T)data)[0..size];
+    }
+
+    void recv(T)(T output, int flags = 0) if (isArray!T)
+    {
+        this.recv(output.ptr, output.length, flags);
+    }
+
+    void recv(T)(out T output, int flags = 0) if (isScalarType!T || is(T == struct))
+    {
+        this.recv(&output, output.sizeof, flags);
     }
 
     void recv(ZMQMessage msg, int flags = 0)
@@ -165,7 +188,7 @@ unittest
     rep.recv(x);
     x.assertEqual(12345);
 
-    auto m = new ZMQMessage(toStringz("abcd"));
+    auto m = new ZMQMessage("abcd");
     rep.send(m);
     auto n = new ZMQMessage(4);
     req.recv(n);

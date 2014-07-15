@@ -5,7 +5,7 @@ import dunit.toolkit;
 import dzmq.error;
 import dzmq.option;
 import dzmq.socket;
-import dzmq.tools;
+import std.traits;
 
 // int zmq_msg_send(zmq_msg_t* msg, void* s, int flags);
 // int zmq_msg_recv(zmq_msg_t* msg, void* s, int flags);
@@ -32,10 +32,22 @@ public:
         ZMQEnforce(zmq_msg_copy(&mMessage, &m.mMessage));
     }
 
-    this(T)(T data)
+    this(T)(T data, size_t size) if (isPointer!T)
     {
-        this(data.sizeof);
-        (this.data())[0 .. data.sizeof] = toVoidPointer(data)[0 .. data.sizeof];
+        this(size);
+        this.data()[0..size] = (cast(void*)data)[0..size];
+    }
+
+    this(T)(T data) if (isScalarType!T || is(T == struct))
+    {
+        ubyte[] value = new ubyte[data.sizeof];
+        value[0..data.sizeof] = (cast(ubyte*)&data)[0..data.sizeof];
+        this(value);
+    }
+
+    this(T)(T data) if (isArray!T)
+    {
+        this(data.ptr, data.length);
     }
 
     ~this()
